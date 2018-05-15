@@ -35,4 +35,12 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>bintray-americanexpress-maven</id>
+            <name>americanexpress-maven</name>
+            <url>https://api.bintray.com/maven/americanexpress/maven/io.aexp.nodes.graphql/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
 </project>
