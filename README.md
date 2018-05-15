@@ -1,6 +1,9 @@
 # Nodes
 > A GraphQL JVM Client - Java, Kotlin, Scala, etc.
 
+[![Build Status](https://travis-ci.org/americanexpress/nodes.svg)](https://travis-ci.org/americanexpress/nodes)
+[![Coverage Status](https://img.shields.io/coveralls/americanexpress/nodes.svg)](https://coveralls.io/github/americanexpress/nodes)
+
 Nodes is a GraphQL client designed for constructing queries from standard model definitions. Making
 this library suitable for any JVM application that wishes to interface with a GraphQL service in a
 familiar way - a simple, flexible, compatible, adoptable, understandable library for everyone!
