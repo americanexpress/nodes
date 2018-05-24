@@ -4,8 +4,12 @@
 
     <groupId>io.aexp.nodes.graphql</groupId>
     <artifactId>parent</artifactId>
-    <packaging>pom</packaging>
     <version>0.1.0</version>
+    <packaging>pom</packaging>
+
+    <name>Nodes (Parent)</name>
+    <description>A GraphQL JVM Client - Java, Kotlin, Scala, etc.</description>
+    <url>https://github.com/americanexpress/nodes/</url>
 
     <modules>
         <module>nodes</module>
@@ -17,6 +21,41 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://github.com/americanexpress/nodes/blob/master/LICENSE.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Andrew Pratt</name>
+            <email>andrew.k.pratt@aexp.com</email>
+            <organization>American Express</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/americanexpress/nodes</url>
+        <connection>scm:git:git://github.com/americanexpress/nodes.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/americanexpress/nodes.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/americanexpress/nodes/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-americanexpress-maven</id>
+            <name>americanexpress-maven</name>
+            <url>https://api.bintray.com/maven/americanexpress/maven/io.aexp.nodes.graphql/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
     <dependencyManagement></dependencyManagement>
 
@@ -34,13 +73,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>bintray-americanexpress-maven</id>
-            <name>americanexpress-maven</name>
-            <url>https://api.bintray.com/maven/americanexpress/maven/io.aexp.nodes.graphql/;publish=1</url>
-        </repository>
-    </distributionManagement>
 
 </project>
