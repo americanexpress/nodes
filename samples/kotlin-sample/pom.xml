@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>kotlin-sample</artifactId>
+    <name>Kotlin Sample</name>
 
     <properties>
         <kotlin.version>1.0.0</kotlin.version>
@@ -61,6 +62,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
