@@ -38,7 +38,7 @@ Replace _latest_ with the desired version to install. The versions available for
 ```Java
 GraphQLTemplate graphQLTemplate = new GraphQLTemplate();
 
-GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder();
+GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
     .url("http://graphql.example.com/graphql");
     .variables(new Variable("timeFormat", "MM/dd/yyyy"))
     .arguments(new Arguments("path.to.argument.property",
