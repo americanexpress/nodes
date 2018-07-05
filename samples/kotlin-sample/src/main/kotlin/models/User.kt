@@ -19,7 +19,7 @@ import io.aexp.nodes.graphql.annotations.GraphQLVariable
 
 @GraphQLProperty(name = "user", arguments = arrayOf(
         GraphQLArgument(name = "login")))
-class User(private val name: String, private val location: String, @GraphQLVariable(name = "isFork", scalar = "Boolean!") private val repositories: RepositoryConnection? = null) {
+class User(val name: String? = null, val location: String? = null, @GraphQLVariable(name = "isFork", scalar = "Boolean!") val repositories: RepositoryConnection? = null) {
 
     override fun toString(): String {
         return "User(name=$name, location=$location, repositories=$repositories)"
