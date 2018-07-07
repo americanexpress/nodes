@@ -17,18 +17,37 @@ response entity is used to gather the results.
 
 ## Installing
 
+Currently the library is hosted on bintray. This can be added to your installation repositories as demonstrated below.
+
 _Maven_
 ```xml
-<dependency>
-  <groupId>io.aexp.nodes.graphql</groupId>
-  <artifactId>nodes</artifactId>
-  <version>latest</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>bintray-americanexpress-maven</id>
+        <url>https://dl.bintray.com/americanexpress/maven</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+      <groupId>io.aexp.nodes.graphql</groupId>
+      <artifactId>nodes</artifactId>
+      <version>latest</version>
+    </dependency>
+</dependencies>
 ```
 
 _Gradle_
 ```
-compile 'io.aexp.nodes.graphql:nodes:latest'
+repositories {
+    maven {
+        url 'https://dl.bintray.com/americanexpress/maven/'
+    }
+}
+
+dependencies {
+    compile 'io.aexp.nodes.graphql:nodes:latest'
+}
 ```
 
 Replace _latest_ with the desired version to install. The versions available for installing can be found in the git tags, using semantic versioning.
