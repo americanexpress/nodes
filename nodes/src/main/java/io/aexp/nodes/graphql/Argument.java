@@ -14,8 +14,17 @@
 package io.aexp.nodes.graphql;
 
 public class Argument<T> extends Parameter {
+    private String variable;
     public Argument(String key, T value) {
         super(key, value);
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public void setVariable(String variable) {
+        this.variable = variable;
     }
 
     @Override

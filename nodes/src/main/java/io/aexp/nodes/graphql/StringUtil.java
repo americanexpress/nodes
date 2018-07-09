@@ -58,6 +58,14 @@ abstract class StringUtil {
         return stringBuilder.toString();
     }
 
+    static <T> String formatGraphQLParameter(String key, T value, String variable) {
+        if(variable != null && !variable.equals("") && !variable.equals("null")) {
+            StringBuilder stringBuilder = new StringBuilder();
+            return stringBuilder.append(key).append(":").append("$").append(variable).toString();
+        }
+        return formatGraphQLParameter(key, value);
+    }
+
     /**
      * Formats a list of values to confirm with GraphQL specification based on the type of each value
      *

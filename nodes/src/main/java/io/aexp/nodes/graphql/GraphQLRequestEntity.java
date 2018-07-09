@@ -25,12 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.aexp.nodes.graphql.annotations.GraphQLArgument;
-import io.aexp.nodes.graphql.annotations.GraphQLArguments;
-import io.aexp.nodes.graphql.annotations.GraphQLIgnore;
-import io.aexp.nodes.graphql.annotations.GraphQLProperty;
-import io.aexp.nodes.graphql.annotations.GraphQLVariable;
-import io.aexp.nodes.graphql.annotations.GraphQLVariables;
+import io.aexp.nodes.graphql.annotations.*;
 import io.aexp.nodes.graphql.exceptions.GraphQLException;
 
 public final class GraphQLRequestEntity {
@@ -42,9 +37,8 @@ public final class GraphQLRequestEntity {
     private final URL url;
     private final Map<String, String> headers;
     private final Map<String, Object> variables;
-    private final Property property = new Property();
     private final List<Class> scalars;
-    private GraphQLTemplate.GraphQLMethod requestMethod = GraphQLTemplate.GraphQLMethod.QUERY;
+    private final Operation operation = new Operation();
     private String request;
 
     GraphQLRequestEntity(RequestBuilder builder) {
@@ -55,7 +49,7 @@ public final class GraphQLRequestEntity {
         if (builder.request != null) {
             this.request = builder.request;
         } else {
-            setPropertiesFromClass(builder.clazz);
+            setOperationFromClass(builder.clazz);
         }
         if (builder.arguments != null) {
             for (Arguments arguments : builder.arguments) {
@@ -76,7 +70,7 @@ public final class GraphQLRequestEntity {
         if (this.request != null) {
             return this.request;
         }
-        return property.getMessage(null);
+        return operation.getMessage();
     }
 
     public Map<String, Object> getVariables() {
@@ -88,8 +82,7 @@ public final class GraphQLRequestEntity {
     }
 
     void setRequestMethod(GraphQLTemplate.GraphQLMethod requestMethod) {
-        this.requestMethod = requestMethod;
-        property.setMethod(requestMethod);
+        operation.setMethod(requestMethod);
     }
 
     @Override
@@ -103,6 +96,53 @@ public final class GraphQLRequestEntity {
     // Utility
 
     /**
+     * Builds the request tree from the provided class.
+     *
+     * @param clazz the class used to construct the request
+     */
+    private void setOperationFromClass(Class clazz) {
+        Map<String, Object> propertyVariables = new HashMap<String, Object>();
+        Map<String, Property> children = this.getChildren(clazz, propertyVariables);
+
+        GraphQLProperty graphQLProperty = (GraphQLProperty) clazz.getAnnotation(GraphQLProperty.class);
+        GraphQLOperation graphQLOperation = (GraphQLOperation) clazz.getAnnotation(GraphQLOperation.class);
+        GraphQLProperty operationGraphQLProperty = null;
+
+        if(graphQLOperation != null) {
+            operation.setName(graphQLOperation.name());
+            operation.setMethod(graphQLOperation.method());
+
+            for(GraphQLVariable graphQLVariable : graphQLOperation.variables()) {
+                propertyVariables.put("$" + graphQLVariable.name(), graphQLVariable.scalar());
+            }
+
+            operationGraphQLProperty = graphQLOperation.property();
+            if(operationGraphQLProperty != null){
+                Property classProperty = annotationToProperty(operationGraphQLProperty);
+                // fix for RequestBuilderTest tests that expectation top level property has no resource name (alias)
+                // TODO - remove when RequestBuilderTests are fixed
+                classProperty.setResourceName(null);
+                classProperty.setChildren(children);
+                operation.getChildren().put(operationGraphQLProperty.name(), classProperty);
+            }
+        }
+
+        if(operationGraphQLProperty == null && graphQLProperty != null) {
+            Property classProperty = annotationToProperty(graphQLProperty);
+            // fix for RequestBuilderTest tests that expectation top level property has no resource name (alias)
+            // TODO - remove when RequestBuilderTests are fixed
+            classProperty.setResourceName(null);
+            classProperty.setChildren(children);
+            operation.getChildren().put(graphQLProperty.name(), classProperty);
+        } else if(operationGraphQLProperty == null){
+            operation.setChildren(children);
+        }
+
+        operation.setVariables(propertyVariables);
+        operation.setChildren(Collections.unmodifiableMap(operation.getChildren()));
+    }
+
+    /**
      * Set arguments on a field in the request.
      *
      * @param dotPath is the nested path of classes and fields concatenated together by '.' to where the arguments will
@@ -113,11 +153,28 @@ public final class GraphQLRequestEntity {
      * @throws GraphQLException is thrown at runtime if the dotPath does not correlate to a field accepting arguments
      */
     private void setArguments(String dotPath, List<Argument> arguments) throws GraphQLException {
-        Property argProp = property;
         String[] path = dotPath.split("\\.");
-        for (String key: path) {
-            argProp = argProp.getChildren().get(key);
+        Map<String, Property> children = operation.getChildren();
+        Property argProp = null;
+
+        if(path.length == 0) {
+            if(children.size() > 1) {
+                throw new GraphQLException("Operation contains more than one property, dot path must specify a top level property");
+            }
+
+            Map.Entry<String,Property> entry = children.entrySet().iterator().next();
+            argProp = entry.getValue();
         }
+
+        int childrenIndex = 0;
+        for (String key: path) {
+            if(childrenIndex++ == 0) {
+                argProp = children.get(key);
+            } else if(argProp != null) {
+                argProp = argProp.getChildren().get(key);
+            }
+        }
+
         if (argProp == null) throw new GraphQLException("'" + dotPath + "' is an invalid property path");
         List<Argument> args = argProp.getArguments();
         if (args == null) {
@@ -129,6 +186,7 @@ public final class GraphQLRequestEntity {
             if (index == -1) throw new GraphQLException("Argument '" + argument + "' doesn't exist on path '" + dotPath + "'");
             Argument propArg = args.get(index);
             propArg.setValue(argument.getValue());
+            propArg.setVariable(argument.getVariable());
         }
     }
 
@@ -143,42 +201,33 @@ public final class GraphQLRequestEntity {
         return -1;
     }
 
-    /**
-     * Builds the request tree from the provided class.
-     *
-     * @param clazz the class used to construct the request
-     */
-    private void setPropertiesFromClass(Class clazz) {
-        Map<String, Object> propertyVariables = new HashMap<String, Object>();
-        Map<String, Property> children = this.getChildren(clazz, propertyVariables);
-        GraphQLProperty graphQLProperty = (GraphQLProperty) clazz.getAnnotation(GraphQLProperty.class);
-        if (graphQLProperty != null) {
-            Property resourceProperty = new Property();
-            List<Argument> arguments = null;
-            String resourceName = graphQLProperty.name();
-            if (graphQLProperty.arguments().length > 0) {
-                arguments = new ArrayList<Argument>();
-                for (GraphQLArgument graphQLArgument : graphQLProperty.arguments()) {
-                    arguments = setArgument(arguments, graphQLArgument);
-                }
-            }
-            resourceProperty.setArguments(arguments);
-            resourceProperty.setChildren(children);
-            Map<String, Property> resourceChild = new HashMap<String, Property>();
-            resourceChild.put(resourceName, resourceProperty);
-            children = resourceChild;
-        }
-        property.setChildren(Collections.unmodifiableMap(children));
-        property.setMethod(requestMethod);
-        property.setVariables(Collections.unmodifiableMap(propertyVariables));
-    }
-
     private Map<String, Object> variableListToMap(List<Variable> variables) {
         Map<String, Object> variableMap = new HashMap<String, Object>();
         for (Variable variable : variables) {
             variableMap.put(variable.getKey(), variable.getValue());
         }
         return variableMap;
+    }
+
+    private Property annotationToProperty(GraphQLProperty annotation) {
+        Property property = new Property();
+        property.setChildren(new HashMap<String, Property>());
+        property.setArguments(new ArrayList<Argument>());
+
+        if( annotation == null) {
+            return property;
+        }
+
+        List<Argument> arguments = new ArrayList<Argument>();
+        String name = annotation.name();
+        property.setResourceName(name);
+
+        for (GraphQLArgument graphQLArgument : annotation.arguments()) {
+            arguments = setArgument(arguments, graphQLArgument);
+        }
+
+        property.setArguments(arguments);
+        return property;
     }
 
     private boolean isList(Field field) {
@@ -202,7 +251,7 @@ public final class GraphQLRequestEntity {
     }
 
     /**
-     * Adds the arguments into the argument list from the GraphQLArgument annotation to provide the correct type
+     * Adds the arguments into the argument list from the GraphQLArgument annotation to provide the correct method
      *
      * @param arguments list of arguments to add the annotated argument to
      * @param graphQLArgument annotated argument to add to the request construction
@@ -210,15 +259,20 @@ public final class GraphQLRequestEntity {
      */
     private List<Argument> setArgument(List<Argument> arguments, GraphQLArgument graphQLArgument) {
         String type = graphQLArgument.type();
+        Argument argument;
         if ("Boolean".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Boolean>(graphQLArgument.name(), Boolean.valueOf(graphQLArgument.value())));
+            argument = new Argument<Boolean>(graphQLArgument.name(), Boolean.valueOf(graphQLArgument.value()));
         } else if ("Integer".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Integer>(graphQLArgument.name(), Integer.valueOf(graphQLArgument.value())));
+            argument = new Argument<Integer>(graphQLArgument.name(), Integer.valueOf(graphQLArgument.value()));
         } else if ("Float".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Float>(graphQLArgument.name(), Float.valueOf(graphQLArgument.value())));
+            argument = new Argument<Float>(graphQLArgument.name(), Float.valueOf(graphQLArgument.value()));
         } else {
-            arguments.add(new Argument<String>(graphQLArgument.name(), graphQLArgument.value()));
+            argument = new Argument<String>(graphQLArgument.name(), graphQLArgument.value());
         }
+
+        argument.setVariable(graphQLArgument.variable());
+
+        arguments.add(argument);
         return arguments;
     }
 

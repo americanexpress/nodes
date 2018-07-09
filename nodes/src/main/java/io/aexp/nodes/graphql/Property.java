@@ -50,12 +50,14 @@ final class Property {
             message.append(StringUtil.joinStringArray(",", variableList));
             message.append(")");
         }
-        if (this.resourceName != null) message.append(": ").append(resourceName);
+        if (this.resourceName != null) { // && !this.resourceName.equals(field)) {
+            message.append(": ").append(resourceName);
+        }
         if (this.arguments != null && !this.arguments.isEmpty()) {
             message.append("(");
             List<String> argumentList = new ArrayList<String>();
             for (Argument argument: arguments) {
-                argumentList.add(StringUtil.formatGraphQLParameter(argument.getKey(), argument.getValue()));
+                argumentList.add(StringUtil.formatGraphQLParameter(argument.getKey(), argument.getValue(), argument.getVariable()));
             }
             message.append(StringUtil.joinStringArray(",", argumentList));
             message.append(") ");
