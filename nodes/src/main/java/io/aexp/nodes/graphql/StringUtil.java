@@ -36,7 +36,7 @@ abstract class StringUtil {
     }
 
     /**
-     * Formats arguments to confirm with GraphQL specification based on the method
+     * Formats arguments to confirm with GraphQL specification based on the type
      *
      * @param key the key the parameter is assigned to
      * @param value the value to assign to the key
@@ -67,7 +67,7 @@ abstract class StringUtil {
     }
 
     /**
-     * Formats a list of values to confirm with GraphQL specification based on the method of each value
+     * Formats a list of values to confirm with GraphQL specification based on the type of each value
      *
      * @param values the array of values to format
      * @return String
