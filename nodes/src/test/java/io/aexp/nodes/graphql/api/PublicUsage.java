@@ -64,7 +64,7 @@ public class PublicUsage {
                 "  }," +
                 "  \"errors\": [\n" +
                 "    {\n" +
-                "      \"message\": \"Cannot query field \\\"invalid\\\" on type \\\"TestTO\\\".\",\n" +
+                "      \"message\": \"Cannot query field \\\"invalid\\\" on method \\\"TestTO\\\".\",\n" +
                 "      \"locations\": [\n" +
                 "        {\n" +
                 "          \"line\": 1,\n" +
@@ -197,7 +197,7 @@ public class PublicUsage {
         Assert.assertEquals(1, errors.length);
         for (Error error : errors) {
             String message = error.getMessage();
-            Assert.assertEquals("Cannot query field \"invalid\" on type \"TestTO\".", message);
+            Assert.assertEquals("Cannot query field \"invalid\" on method \"TestTO\".", message);
             Location[] locations = error.getLocations();
             Assert.assertEquals(1, locations.length);
             for (Location location : locations) {

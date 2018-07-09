@@ -36,7 +36,7 @@ abstract class StringUtil {
     }
 
     /**
-     * Formats arguments to confirm with GraphQL specification based on the type
+     * Formats arguments to confirm with GraphQL specification based on the method
      *
      * @param key the key the parameter is assigned to
      * @param value the value to assign to the key
@@ -58,8 +58,16 @@ abstract class StringUtil {
         return stringBuilder.toString();
     }
 
+    static <T> String formatGraphQLParameter(String key, T value, String variable) {
+        if(variable != null && !variable.equals("") && !variable.equals("null")) {
+            StringBuilder stringBuilder = new StringBuilder();
+            return stringBuilder.append(key).append(":").append("$").append(variable).toString();
+        }
+        return formatGraphQLParameter(key, value);
+    }
+
     /**
-     * Formats a list of values to confirm with GraphQL specification based on the type of each value
+     * Formats a list of values to confirm with GraphQL specification based on the method of each value
      *
      * @param values the array of values to format
      * @return String

@@ -70,6 +70,30 @@ GraphQLResponseEntity<SampleModel> responseEntity = graphQLTemplate.query(reques
 
 ### Annotations to configure fields
 
+#### `@GraphQLOperation(name="name", method=GraphQLTemplate.GraphQLMethod, property=@GraphQLProperty, varibales={@GraphQLVariable})`
+> Used above classes for more complex queries with variables.<br><b>name (required)</b>: GraphQL operation name <br><b>method (optional)</b>: GraphQL operation method (Query, Mutation) defaults to Query.<br><b>property (optional)</b>: Define property for the operation. Overrides @GraphQLProperty. Defaults to the class name.<br><b>variables (optional)</b>: Variables to use in the operation.
+
+*example:*
+```java
+    ...
+    @GraphQLOperation(name="MyUserQuery", 
+    property = @GraphQLProperty(name = "User", arguments = {
+        @GraphQLArgument(name = "name", variable="name")
+    }), 
+    variables={@GraphQLVariable(name = "name", scalar = "String")})    
+    class User {
+        ...
+    }
+```
+
+*result:*
+```
+query MyUserQuery($name:String){
+    UserQuery(name: $name) {
+        ...
+    }
+```
+
 #### `@GraphQLArgument(name="name", value="defaultVal", type="String")`
 > Used above property fields<br><b>name (required)</b>: GraphQL argument name<br><b>value (optional)</b>: default value to set the argument to<br><b>type (optional)</b>: how to parse the optional value. Accepts an enum of "String", "Boolean", "Integer", or "Float" - defaults to be parsed as a string.<br>You can specify fields arguments directly inline using this. This is good for static field arguments such as result display settings, for instance the format of a date or the locale of a message.
 
@@ -150,8 +174,7 @@ query {
 ```
 
 #### `@GraphQLVariable(name="name", scalar="Float!")`
-> Used above property fields<br><b>name (required)</b>: GraphQL variable name<br><b>type (required)</b>: GraphQL scalar type. Including optional and required parsing (!)<br>This is good for sharing the same variables across multiple input parameters in a query.
-
+> (deprecated) Used above property fields<br><b>name (required)</b>: GraphQL variable name<br><b>type (required)</b>: GraphQL scalar type. Including optional and required parsing (!)<br>This is good for sharing the same variables across multiple input parameters in a query.
 *example:*
 ```java
     ...
@@ -168,7 +191,49 @@ query($isPublic: Boolean) {
         ...
 ```
 
-#### `@GraphQLVariables({@GraphQLVariable})`
+> (Preferred) Use `@GraphQLArgument` in models to define the placeholder, then Use w/ `@GraphQLOperation` when specifying variables used in the operation. Finally link the argument w/ the variable when building the request.
+ ```java    
+    @GraphQLArguments({
+         @GraphQLArgument(name="isPublic", value="true", type="Boolean"),
+         @GraphQLArgument(name="name")
+     })
+     class User {
+        ...
+     };
+     
+     @GraphQLOperation(name = "FindUserByName", variables = {
+        @GraphQLVariable(name = "nameFilter", scalar = "String")
+     })
+     class UserByName extends User {
+     }
+     
+     class UserRepo {
+        public User findUserByName(String name) {
+            GraphQLTemplate graphQLTemplate = new GraphQLTemplate();
+
+            GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url("http://graphql.example.com/graphql");
+                .variables(new Variable("nameFilter", name))
+                .arguments(new Arguments("UserByName",
+                    new Argument("name", null, "nameFilter")))
+                .request(UserByName.class)
+                .build();
+            GraphQLResponseEntity<UserByName> responseEntity = graphQLTemplate.query(requestEntity, UserByName.class);        
+        }
+     }
+ ```
+ 
+ *result:*
+ ```
+ query FindUserByName($nameFilter: String) {
+     UserByName(name: $nameFilter) {
+         ...
+     }
+ }
+ ```
+
+
+#### `@GraphQLVariables({@GraphQLVariable})` (deprecated)
 > Used above property fields<br>Annotation for allowing mutliple variables for a given field.
 
 *example:*

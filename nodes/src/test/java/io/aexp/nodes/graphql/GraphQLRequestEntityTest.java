@@ -13,6 +13,7 @@
 
 package io.aexp.nodes.graphql;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import io.aexp.nodes.graphql.models.TestModel;
 import io.aexp.nodes.graphql.models.TestModelScalar;
@@ -64,6 +65,9 @@ public class GraphQLRequestEntityTest {
                 .build();
         requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
         assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
+        String expected = "GraphQLRequestEntity{request='query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:null) { testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte testString : testString(anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ', url='"+EXAMPLE_URL+"'}";
+        System.out.println("ACTUAL: " + requestEntity.toString());
+        System.out.println("EXPECTED: " + expected);
         assertEquals("GraphQLRequestEntity{request='query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:null) { testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte testString : testString(anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
     }
 
