@@ -50,7 +50,7 @@ final class Property {
             message.append(StringUtil.joinStringArray(",", variableList));
             message.append(")");
         }
-        if (this.resourceName != null) message.append(": ").append(resourceName);
+        if (this.resourceName != null) message.append(": ").append(resourceName).append(" ");
         if (this.arguments != null && !this.arguments.isEmpty()) {
             message.append("(");
             List<String> argumentList = new ArrayList<String>();
