@@ -34,8 +34,8 @@ public class PropertyTest {
         assertNull(property.getVariables());
         assertNull(property.getChildren());
         assertEquals("resourceName", property.getResourceName());
-        assertEquals("query : resourceName", property.getMessage(null));
-        assertEquals("query fieldName : resourceName", property.getMessage("fieldName"));
+        assertEquals("query : resourceName ", property.getMessage(null));
+        assertEquals("query fieldName : resourceName ", property.getMessage("fieldName"));
         assertEquals("Property{resourceName='resourceName', method='QUERY', arguments=null, variables=null, children=null, message=}", property.toString());
     }
 }

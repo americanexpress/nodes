@@ -88,14 +88,10 @@ public class PublicUsage {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", "some token");
 
-        InputObject inputObject = new InputObject.Builder<Argument>()
-                .put("someKey", new Argument<String>("innerKey", "someValue"))
-                .build();
-
         GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
                 .request(TestModel.class)
                 .url(mockServerUrl.toString())
-                .arguments(new Arguments("test", new Argument<InputObject>("parameters", inputObject)))
+                .arguments(new Arguments("test", new Argument<String>("id", "someId")))
                 .variables(new Variable<String>("someVariableKey", "someVariableValue"))
                 .scalars(BigDecimal.class, BigInteger.class)
                 .headers(headers)
@@ -208,6 +204,6 @@ public class PublicUsage {
     }
 
     private String requestQuery(GraphQLTemplate.GraphQLMethod method) {
-        return method.getValue() + " ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:\"someId\") { testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte testString : testString(anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ";
+        return method.getValue() + " ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:\"someId\") { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ";
     }
 }
