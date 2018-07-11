@@ -88,14 +88,10 @@ public class PublicUsage {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", "some token");
 
-        InputObject inputObject = new InputObject.Builder<Argument>()
-                .put("someKey", new Argument<String>("innerKey", "someValue"))
-                .build();
-
         GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
                 .request(TestModel.class)
                 .url(mockServerUrl.toString())
-                .arguments(new Arguments("test", new Argument<InputObject>("parameters", inputObject)))
+                .arguments(new Arguments("test", new Argument<String>("id", "someId")))
                 .variables(new Variable<String>("someVariableKey", "someVariableValue"))
                 .scalars(BigDecimal.class, BigInteger.class)
                 .headers(headers)

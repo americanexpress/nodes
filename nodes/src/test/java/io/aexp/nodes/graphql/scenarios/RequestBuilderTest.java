@@ -98,7 +98,7 @@ public class RequestBuilderTest {
                 .url(EXAMPLE_URL)
                 .request(TestModelExtended.class)
                 .build();
-        assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test { testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } test testByte testFloat testLong testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testPrimitiveArray testString : testString(anotherOne:null,default:\"default\",defaultList:null) testArrayList testDouble } } ", requestEntity.getRequest());
+        assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$aVariable:String,$andAListVariable:[String],$variableName:String!){ test (aVariable:$aVariable) { testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } test testByte testFloat testLong testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testPrimitiveArray testString : testString(anotherOne:null,default:\"default\",defaultList:null) testArrayList testDouble } } ", requestEntity.getRequest());
         assertTrue(requestEntity.getVariables().isEmpty());
     }
 

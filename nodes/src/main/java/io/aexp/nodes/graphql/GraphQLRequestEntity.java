@@ -154,15 +154,19 @@ public final class GraphQLRequestEntity {
         GraphQLProperty graphQLProperty = (GraphQLProperty) clazz.getAnnotation(GraphQLProperty.class);
         if (graphQLProperty != null) {
             Property resourceProperty = new Property();
-            List<Argument> arguments = null;
+            List<Argument> arguments = new ArrayList<Argument>();
             String resourceName = graphQLProperty.name();
             if (graphQLProperty.arguments().length > 0) {
-                arguments = new ArrayList<Argument>();
                 for (GraphQLArgument graphQLArgument : graphQLProperty.arguments()) {
                     arguments = setArgument(arguments, graphQLArgument);
                 }
             }
-            resourceProperty.setArguments(arguments);
+            if (graphQLProperty.variables().length > 0) {
+                for (GraphQLVariable graphQLVariable : graphQLProperty.variables()) {
+                    arguments = setVariable(arguments, graphQLVariable, propertyVariables);
+                }
+            }
+            if (arguments.size() > 0) resourceProperty.setArguments(arguments);
             resourceProperty.setChildren(children);
             Map<String, Property> resourceChild = new HashMap<String, Property>();
             resourceChild.put(resourceName, resourceProperty);
@@ -223,6 +227,21 @@ public final class GraphQLRequestEntity {
     }
 
     /**
+     * Adds the variables into the argument list from the GraphQLVariable annotation and sets it to the property
+     *
+     * @param arguments list of arguments to add the annotated argument to
+     * @param graphQLVariable annotated variable to add to the request construction
+     * @param propertyVariables list of variables on the property
+     * @return List\<Argument>
+     */
+    private List<Argument> setVariable(List<Argument> arguments, GraphQLVariable graphQLVariable, Map<String, Object> propertyVariables) {
+        if (arguments == null) arguments = new ArrayList<Argument>();
+        arguments.add(new Argument<String>(graphQLVariable.name(), "$" + graphQLVariable.name()));
+        propertyVariables.put("$" + graphQLVariable.name(), graphQLVariable.scalar());
+        return arguments;
+    }
+
+    /**
      * Recursively iterates over nested classes building the request tree while checking for any annotations to apply to
      * the fields.
      *
@@ -250,12 +269,11 @@ public final class GraphQLRequestEntity {
             }
 
             String propertyKey = field.getName();
-            List<Argument> arguments = null;
+            List<Argument> arguments = new ArrayList<Argument>();
             Property property = new Property();
 
             GraphQLProperty propertyAnnotation = field.getAnnotation(GraphQLProperty.class);
             if (propertyAnnotation != null) {
-                arguments = new ArrayList<Argument>();
                 String name = propertyAnnotation.name();
                 property.setResourceName(name);
                 propertyKey = field.getName();
@@ -265,34 +283,28 @@ public final class GraphQLRequestEntity {
             }
             GraphQLArguments argumentsAnnotation = field.getAnnotation(GraphQLArguments.class);
             if (argumentsAnnotation != null) {
-                if (arguments == null) arguments = new ArrayList<Argument>();
                 for (GraphQLArgument graphQLArgument : argumentsAnnotation.value()) {
                     arguments = setArgument(arguments, graphQLArgument);
                 }
             }
             GraphQLArgument graphQLArgument = field.getAnnotation(GraphQLArgument.class);
             if (graphQLArgument != null) {
-                if (arguments == null) arguments = new ArrayList<Argument>();
                 arguments = setArgument(arguments, graphQLArgument);
             }
 
             GraphQLVariables variablesAnnotation = field.getAnnotation(GraphQLVariables.class);
             if (variablesAnnotation != null) {
-                if (arguments == null) arguments = new ArrayList<Argument>();
                 for (GraphQLVariable graphQLVariable : variablesAnnotation.value()) {
-                    arguments.add(new Argument<String>(graphQLVariable.name(), "$" + graphQLVariable.name()));
-                    propertyVariables.put("$" + graphQLVariable.name(), graphQLVariable.scalar());
+                    arguments = setVariable(arguments, graphQLVariable, propertyVariables);
                 }
             }
 
             GraphQLVariable graphQLVariable = field.getAnnotation(GraphQLVariable.class);
             if (graphQLVariable != null) {
-                if (arguments == null) arguments = new ArrayList<Argument>();
-                arguments.add(new Argument<String>(graphQLVariable.name(), "$" + graphQLVariable.name()));
-                propertyVariables.put("$" + graphQLVariable.name(), graphQLVariable.scalar());
+                arguments = setVariable(arguments, graphQLVariable, propertyVariables);
             }
 
-            property.setArguments(arguments);
+            if (arguments.size() > 0) property.setArguments(arguments);
 
             if (isList(field)) {
                 Type type = field.getGenericType();

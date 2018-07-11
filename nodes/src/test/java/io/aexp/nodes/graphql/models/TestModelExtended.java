@@ -14,10 +14,11 @@
 package io.aexp.nodes.graphql.models;
 
 import io.aexp.nodes.graphql.annotations.GraphQLProperty;
+import io.aexp.nodes.graphql.annotations.GraphQLVariable;
 
 import java.util.Arrays;
 
-@GraphQLProperty(name = "test")
+@GraphQLProperty(name = "test", variables = {@GraphQLVariable(name = "aVariable", scalar = "String")})
 public class TestModelExtended extends TestModel {
     String test;
     boolean[] testPrimitiveArray;

@@ -25,4 +25,5 @@ public @interface GraphQLProperty {
 
     String name();
     GraphQLArgument[] arguments() default {};
+    GraphQLVariable[] variables() default {};
 }
