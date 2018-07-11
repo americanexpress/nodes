@@ -29,7 +29,9 @@ public class TestModel {
     })
     @GraphQLProperty(name = "testString", arguments = {@GraphQLArgument(name = "anotherOne")})
     private String testString;
+    @GraphQLProperty(name = "testByte")
     private Byte testByte;
+    @GraphQLProperty(name = "testShort")
     private Short testShort;
     private Integer testInteger;
     private Long testLong;
