@@ -56,16 +56,16 @@ public class ArgumentSettingTest {
         try {
             GraphQLRequestEntity.Builder()
                 .url(EXAMPLE_URL)
-                .arguments(new Arguments("test.testShort", new Argument("id", "1")))
+                .arguments(new Arguments("test.testLong", new Argument("id", "1")))
                 .request(TestModel.class)
                 .build();
         } catch (GraphQLException e) {
             exception = e;
         }
         assertNotNull(exception);
-        assertEquals("Path 'test.testShort' is not expecting any arguments, please set the @GraphQLArguments or @GraphQLProperty annotation on the field you are expecting arguments for", exception.getMessage());
+        assertEquals("Path 'test.testLong' is not expecting any arguments, please set the @GraphQLArguments or @GraphQLProperty annotation on the field you are expecting arguments for", exception.getMessage());
         assertNull(exception.getErrors());
-        assertEquals("GraphQLException{message='Path 'test.testShort' is not expecting any arguments, please set the @GraphQLArguments or @GraphQLProperty annotation on the field you are expecting arguments for', status='null', description='null', errors=null}", exception.toString());
+        assertEquals("GraphQLException{message='Path 'test.testLong' is not expecting any arguments, please set the @GraphQLArguments or @GraphQLProperty annotation on the field you are expecting arguments for', status='null', description='null', errors=null}", exception.toString());
     }
 
     @Test
