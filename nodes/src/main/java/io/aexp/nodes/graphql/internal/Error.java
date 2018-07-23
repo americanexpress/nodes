@@ -52,7 +52,7 @@ public final class Error {
     public List<Object> getPath() {
         return path;
     }
-    
+
     void setPath(List<Object> path) {
         this.path = path;
     }
@@ -64,7 +64,7 @@ public final class Error {
                 ", locations=" + Arrays.toString(locations) +
                 ", extensions=" + extensions +
                 ", path=" + path +
-                ", errorType=" + errorType + 
+                ", errorType=" + errorType +
                 '}';
     }
 }
