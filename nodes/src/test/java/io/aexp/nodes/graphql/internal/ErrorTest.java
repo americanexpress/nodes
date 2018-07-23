@@ -25,11 +25,8 @@ public class ErrorTest {
         Error error = new Error();
         error.setMessage("error message");
         error.setLocations(null);
-        error.setErrorType("DataFetchingException");
-        error.setPath(null);
-        error.setExtensions(null);
         assertNull(error.getLocations());
         assertEquals("error message", error.getMessage());
-        assertEquals("Error{message='error message', locations=null, extensions=null, path=null, errorType='DataFetchingException'}", error.toString());
+        assertEquals("Error{message='error message', locations=null}", error.toString());
     }
 }
