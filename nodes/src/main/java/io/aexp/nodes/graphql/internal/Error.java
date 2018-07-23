@@ -14,6 +14,7 @@
 package io.aexp.nodes.graphql.internal;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public final class Error {
 
