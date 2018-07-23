@@ -15,7 +15,7 @@ package io.aexp.nodes.graphql.internal;
 
 import java.util.Arrays;
 
-public final class Error {
+public final class Error extends CustomError {
 
     private String message;
     private Location[] locations;
