@@ -19,6 +19,7 @@ public final class Error {
 
     private String message;
     private Location[] locations;
+    private Map<String, Object> extensions;
 
     public String getMessage() {
         return message;
@@ -41,6 +42,7 @@ public final class Error {
         return "Error{" +
                 "message='" + message + '\'' +
                 ", locations=" + Arrays.toString(locations) +
+                ", extensions=" + extensions +
                 '}';
     }
 }
