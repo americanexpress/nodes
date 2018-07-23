@@ -14,11 +14,16 @@
 package io.aexp.nodes.graphql.internal;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.List;
 
 public final class Error {
 
-    private String message;
+    private Map<String, Object> extensions;
     private Location[] locations;
+    private String errorType;
+    private String message;
+    private List<Object> path;
 
     public String getMessage() {
         return message;
@@ -36,11 +41,30 @@ public final class Error {
         this.locations = locations;
     }
 
+    public String getErrorType() {
+        return errorType;
+    }
+
+    void setErrorType(String errorType) {
+        this.errorType = errorType;
+    }
+
+    public List<Object> getPath() {
+        return path;
+    }
+    
+    void setPath(List<Object> path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return "Error{" +
                 "message='" + message + '\'' +
                 ", locations=" + Arrays.toString(locations) +
+                ", extensions=" + extensions +
+                ", path=" + path +
+                ", errorType=" + errorType + 
                 '}';
     }
 }
