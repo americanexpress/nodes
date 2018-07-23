@@ -25,12 +25,12 @@ public final class Error {
     private String message;
     private List<Object> path;
 
-    public String getMessage() {
-        return message;
+    public Map<String, Object> getExtensions() {
+        return extensions;
     }
 
-    void setMessage(String message) {
-        this.message = message;
+    void setExtensions(Map<String, Object> extensions) {
+        this.extensions = extensions;
     }
 
     public Location[] getLocations() {
@@ -49,6 +49,14 @@ public final class Error {
         this.errorType = errorType;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    void setMessage(String message) {
+        this.message = message;
+    }
+
     public List<Object> getPath() {
         return path;
     }
@@ -64,7 +72,7 @@ public final class Error {
                 ", locations=" + Arrays.toString(locations) +
                 ", extensions=" + extensions +
                 ", path=" + path +
-                ", errorType=" + errorType +
+                ", errorType='" + errorType + '\'' +
                 '}';
     }
 }
