@@ -60,7 +60,7 @@ final class Property {
             message.append(StringUtil.joinStringArray(",", argumentList));
             message.append(") ");
         }
-        if (children != null) {
+        if (children != null && !children.isEmpty()) {
             message.append("{ ");
             for (Map.Entry<String, Property> entry : children.entrySet()) {
                 message.append(entry.getValue().getMessage(entry.getKey()));
