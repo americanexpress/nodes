@@ -159,4 +159,27 @@ public class RequestBuilderTest {
                 .build();
         assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:{nestedObj:{input4:\"string\",input3:[\"string1\",\"string2\",\"string3\"],input2:true,input1:1}}) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest());
     }
+
+    @Test
+    public void queryWithAListOfInputObjectArguments() throws GraphQLException, MalformedURLException {
+        List<String> stringList = new ArrayList<String>();
+        stringList.add("string1");
+        stringList.add("string2");
+        stringList.add("string3");
+        InputObject input = new InputObject.Builder<Object>()
+                .put("input1", 1)
+                .put("input2", true)
+                .put("input3", stringList)
+                .put("input4", "string")
+                .build();
+        List<InputObject> inputs = new ArrayList<InputObject>();
+        inputs.add(input);
+        inputs.add(input);
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(EXAMPLE_URL)
+                .arguments(new Arguments("test", new Argument("id", inputs)))
+                .request(TestModel.class)
+                .build();
+        assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:[InputObject{map={input4=string, input3=[string1, string2, string3], input2=true, input1=1}},InputObject{map={input4=string, input3=[string1, string2, string3], input2=true, input1=1}}]) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest());
+    }
 }
