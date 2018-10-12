@@ -52,4 +52,13 @@ public class ArgumentTest {
         assertEquals(STATUS.active, argument.getValue());
         assertEquals("Argument{key='test', value=active}", argument.toString());
     }
+    @Test
+    public void argumentInputObjectTest() {
+        Argument argument = new Argument(null, null);
+        argument.setKey("test");
+        InputObject object = new InputObject.Builder().put("key", "value").build();
+        argument.setValue(object);
+        assertEquals("test", argument.getKey());
+        assertEquals("value", object.getMap().get("key"));
+    }
 }
