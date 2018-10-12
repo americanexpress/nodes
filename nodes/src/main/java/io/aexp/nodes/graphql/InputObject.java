@@ -49,13 +49,9 @@ public final class InputObject<T> {
         public InputObject<T> build() {
             return new InputObject<T>(this);
         }
-
     }
 
-    @Override
-    public String toString() {
-        return "InputObject{" +
-                "map=" + map +
-                '}';
+    public Map getMap() {
+        return map;
     }
 }
