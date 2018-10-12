@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class RequestBuilderTest {
@@ -180,6 +181,7 @@ public class RequestBuilderTest {
                 .arguments(new Arguments("test", new Argument("id", inputs)))
                 .request(TestModel.class)
                 .build();
-        assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:[InputObject{map={input4=string, input3=[string1, string2, string3], input2=true, input1=1}},InputObject{map={input4=string, input3=[string1, string2, string3], input2=true, input1=1}}]) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest());
+        assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:[{input4:\"string\",input3:[\"string1\",\"string2\",\"string3\"],input2:true,input1:1},{input4:\"string\",input3:[\"string1\",\"string2\",\"string3\"],input2:true,input1:1}]) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest());
+        assertNotNull(requestEntity.getRequest());
     }
 }
