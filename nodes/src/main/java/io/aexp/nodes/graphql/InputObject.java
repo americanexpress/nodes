@@ -51,11 +51,4 @@ public final class InputObject<T> {
         }
 
     }
-
-    @Override
-    public String toString() {
-        return "InputObject{" +
-                "map=" + map +
-                '}';
-    }
 }
