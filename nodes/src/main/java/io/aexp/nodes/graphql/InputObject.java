@@ -49,6 +49,9 @@ public final class InputObject<T> {
         public InputObject<T> build() {
             return new InputObject<T>(this);
         }
+    }
 
+    public Map getMap() {
+        return map;
     }
 }
