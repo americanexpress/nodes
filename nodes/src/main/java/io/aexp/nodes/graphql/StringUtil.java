@@ -73,6 +73,8 @@ abstract class StringUtil {
             Matcher m = p.matcher("" + value);
             if (value instanceof String && !"null".equalsIgnoreCase((String) value) && !m.find()) {
                 stringBuilder.append("\"").append(value).append("\"");
+            } else if (value instanceof InputObject) {
+                stringBuilder.append(((InputObject) value).getMessage());
             } else {
                 stringBuilder.append(value);
             }
