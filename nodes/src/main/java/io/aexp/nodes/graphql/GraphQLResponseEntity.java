@@ -16,10 +16,14 @@ package io.aexp.nodes.graphql;
 import io.aexp.nodes.graphql.internal.Error;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public final class GraphQLResponseEntity<T> {
 
     private Error[] errors;
+    private Map<String, List<String>> headers;
     private T response;
 
     public Error[] getErrors() {
@@ -28,6 +32,14 @@ public final class GraphQLResponseEntity<T> {
 
     void setErrors(Error[] errors) {
         this.errors = errors;
+    }
+
+    public Map<String, List<String>> getHeaders() {
+        return Collections.unmodifiableMap(headers);
+    }
+
+    void setHeaders(Map<String, List<String>> headers) {
+        this.headers = Collections.unmodifiableMap(headers);
     }
 
     public T getResponse() {
@@ -40,8 +52,22 @@ public final class GraphQLResponseEntity<T> {
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
+        if (headers == null) {
+            builder.append("null");
+        } else {
+            for (Map.Entry entry : headers.entrySet()) {
+                builder.append("[").append(entry.getKey()).append(":");
+                for (String value : (List<String>) entry.getValue()) {
+                    builder.append(value);
+                }
+                builder.append("]");
+            }
+        }
+
         return "GraphQLResponseEntity{" +
                 "errors=" + Arrays.toString(errors) +
+                ", headers=" + builder.toString() +
                 ", response=" + response +
                 '}';
     }
