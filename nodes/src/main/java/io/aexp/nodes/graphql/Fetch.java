@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 final class Fetch {
@@ -53,6 +54,7 @@ final class Fetch {
             dataOutputStream.write(postData);
             dataOutputStream.close();
 
+            Map<String, List<String>> responseHeaders = connection.getHeaderFields();
             responseMessage = connection.getResponseMessage();
             responseStatus = Integer.toString(connection.getResponseCode());
 
@@ -76,6 +78,7 @@ final class Fetch {
             GraphQLResponseEntity<T> graphQLResponseEntity = new GraphQLResponseEntity<T>();
             graphQLResponseEntity.setErrors(wrapper.getErrors());
             if (wrapper.getData() != null) {
+                graphQLResponseEntity.setHeaders(responseHeaders);
                 graphQLResponseEntity.setResponse(wrapper.getData().getResource());
             }
             return graphQLResponseEntity;

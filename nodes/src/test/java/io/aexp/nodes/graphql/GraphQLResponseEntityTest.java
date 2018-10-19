@@ -29,6 +29,6 @@ public class GraphQLResponseEntityTest {
         responseEntity.setResponse(test);
         assertNull(responseEntity.getErrors());
         assertEquals(test, responseEntity.getResponse());
-        assertEquals("GraphQLResponseEntity{errors=null, response=TestTO{testString='null', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", responseEntity.toString());
+        assertEquals("GraphQLResponseEntity{errors=null, headers=null, response=TestTO{testString='null', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", responseEntity.toString());
     }
 }
