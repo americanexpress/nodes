@@ -74,7 +74,7 @@ public class GraphQLTemplateTest {
                 .build();
         GraphQLResponseEntity<TestModel> response = graphQLTemplate.mutate(requestEntity, TestModel.class);
         assertEquals("mutation ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:null) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest().toString());
-        assertEquals("GraphQLResponseEntity{errors=[Error{message='Cannot query field \"invalid\" on type \"TestTO\".', locations=[Location{line='1', column='1'}]}], response=TestTO{testString='String', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", response.toString());
+        assertEquals("GraphQLResponseEntity{errors=[Error{message='Cannot query field \"invalid\" on type \"TestTO\".', locations=[Location{line='1', column='1'}]}], headers=[null:HTTP/1.1 200 OK][Content-Length:261], response=TestTO{testString='String', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", response.toString());
     }
 
     @Test
@@ -115,7 +115,7 @@ public class GraphQLTemplateTest {
                 .build();
         GraphQLResponseEntity<TestModelSimple> secondResponseEntity = graphQLTemplate.mutate(secondRequestEntity, TestModelSimple.class);
         assertEquals("mutation { simpleString } ", secondRequestEntity.getRequest().toString());
-        assertEquals("GraphQLResponseEntity{errors=null, response=TestTOSimple{simpleString='simple string'}}", secondResponseEntity.toString());
+        assertEquals("GraphQLResponseEntity{errors=null, headers=[null:HTTP/1.1 200 OK][Content-Length:71], response=TestTOSimple{simpleString='simple string'}}", secondResponseEntity.toString());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class GraphQLTemplateTest {
                 .build();
         GraphQLResponseEntity<TestModel> response = graphQLTemplate.execute(requestEntity, TestModel.class);
         assertEquals("my graphql query", requestEntity.getRequest().toString());
-        assertEquals("GraphQLResponseEntity{errors=null, response=TestTO{testString='String', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", response.toString());
+        assertEquals("GraphQLResponseEntity{errors=null, headers=[null:HTTP/1.1 200 OK][Content-Length:67], response=TestTO{testString='String', testByte=null, testShort=null, testInteger=null, testLong=null, testCharacter=\u0000, testFloat=null, testDouble=null, testBoolean=null, nestedTest=null, testArrayList=null, testList=null, ignoredField='null'}}", response.toString());
     }
 
     @Test
@@ -194,7 +194,7 @@ public class GraphQLTemplateTest {
         GraphQLException exception = null;
         GraphQLResponseEntity response = graphQLTemplate.query(requestEntity, TestModel.class);
         assertEquals("query ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:null) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ", requestEntity.getRequest().toString());
-        assertEquals("GraphQLResponseEntity{errors=[Error{message='Cannot query field \"invalid\" on type \"TestTO\".', locations=[Location{line='1', column='1'}]}], response=null}", response.toString());
+        assertEquals("GraphQLResponseEntity{errors=[Error{message='Cannot query field \"invalid\" on type \"TestTO\".', locations=[Location{line='1', column='1'}]}], headers=null, response=null}", response.toString());
     }
 
     @Test
