@@ -40,10 +40,7 @@ class Parameter<T> {
 
     @Override
     public String toString() {
-        return "Parameter{" +
-                "key='" + key + '\'' +
-                ", value=" + value +
-                '}';
+        return toString("Parameter");
     }
 
     String toString(String name) {
