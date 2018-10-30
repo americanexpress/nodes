@@ -35,7 +35,7 @@ final class Fetch {
     private static final int STATUS_CODE_THRESHOLD = 400;
 
     <T> GraphQLResponseEntity<T> send(GraphQLRequestEntity requestEntity, Class<T> responseClass) throws GraphQLException {
-        mapper = new ObjectMapper();
+        mapper = ObjectMapperFactory.newObjectMapper();
         module = new SimpleModule();
 
         Request request = new Request();
