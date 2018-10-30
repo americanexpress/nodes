@@ -18,7 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class ObjectMapperFactory {
+public final class ObjectMapperFactory {
+
+    private ObjectMapperFactory() {
+    }
 
     public static ObjectMapper newSerializerObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
@@ -37,7 +40,7 @@ public class ObjectMapperFactory {
 
         // JDK8+ Time and Date handling / JSR-310
         mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS); 
+        mapper.disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
         return mapper;
     }
