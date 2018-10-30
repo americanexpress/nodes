@@ -36,7 +36,7 @@ final class Deserializer<T> extends JsonDeserializer<Resource<T>> {
 
         Resource<T> resourceModel = new Resource<T>();
 
-        ObjectMapper mapper = ObjectMapperFactory.newObjectMapper();
+        ObjectMapper mapper = ObjectMapperFactory.newDeserializerObjectMapper();
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
 
