@@ -37,7 +37,7 @@ final class Fetch {
     private SimpleModule module;
     private static final int STATUS_CODE_THRESHOLD = 400;
 
-    public Fetch(ObjectMapperFactory objectMapperFactory) {
+    Fetch(ObjectMapperFactory objectMapperFactory) {
         this.objectMapperFactory = objectMapperFactory;
     }
 
