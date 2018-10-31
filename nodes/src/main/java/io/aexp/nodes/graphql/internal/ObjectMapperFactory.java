@@ -11,17 +11,21 @@
  * the License.
  */
 
-package io.aexp.nodes.graphql;
+package io.aexp.nodes.graphql.internal;
 
-import static org.junit.Assert.assertNotNull;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.junit.Test;
+public interface ObjectMapperFactory {
 
-public class ObjectMapperFactoryTest {
+    /**
+     * Returns a new ObjectMapper instance used for serialization.
+     * @return ObjectMapper instance used for serialization
+     */
+    ObjectMapper newSerializerMapper();
 
-    @Test
-    public void objectMapperFactoryTest() {
-        assertNotNull(ObjectMapperFactory.newSerializerObjectMapper());
-        assertNotNull(ObjectMapperFactory.newDeserializerObjectMapper());
-    }
+    /**
+     * Returns a new ObjectMapper instance used for deserialization.
+     * @return ObjectMapper instance used for deserialization
+     */
+    ObjectMapper newDeserializerMapper();
 }

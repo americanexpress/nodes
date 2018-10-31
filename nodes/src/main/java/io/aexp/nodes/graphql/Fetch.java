@@ -14,6 +14,8 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.exceptions.GraphQLException;
+import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -30,12 +32,17 @@ import java.util.Map;
 
 final class Fetch {
 
+    private final ObjectMapperFactory objectMapperFactory;
     private ObjectMapper mapper;
     private SimpleModule module;
     private static final int STATUS_CODE_THRESHOLD = 400;
 
+    public Fetch(ObjectMapperFactory objectMapperFactory) {
+        this.objectMapperFactory = objectMapperFactory;
+    }
+
     <T> GraphQLResponseEntity<T> send(GraphQLRequestEntity requestEntity, Class<T> responseClass) throws GraphQLException {
-        mapper = ObjectMapperFactory.newSerializerObjectMapper();
+        mapper = objectMapperFactory.newSerializerMapper();
         module = new SimpleModule();
 
         Request request = new Request();
@@ -111,7 +118,7 @@ final class Fetch {
     }
 
     private <T> Wrapper<T> deserializeResponse(BufferedReader bufferedReader, Class<T> responseClass) throws IOException {
-        Deserializer<T> deserializer = new Deserializer<T>(responseClass);
+        Deserializer<T> deserializer = new Deserializer<T>(responseClass, objectMapperFactory);
         module.addDeserializer(Resource.class, deserializer);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.registerModule(module);
