@@ -14,7 +14,6 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.annotations.GraphQLProperty;
-import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;

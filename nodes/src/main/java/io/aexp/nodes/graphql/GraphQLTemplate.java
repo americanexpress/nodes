@@ -15,7 +15,6 @@ package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.exceptions.GraphQLException;
 import io.aexp.nodes.graphql.internal.DefaultObjectMapperFactory;
-import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 
 public class GraphQLTemplate {
 

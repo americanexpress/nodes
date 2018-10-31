@@ -14,7 +14,6 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.internal.DefaultObjectMapperFactory;
-import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 import io.aexp.nodes.graphql.models.TestModel;
 import io.aexp.nodes.graphql.models.TestModelDateTime;
 import io.aexp.nodes.graphql.models.TestModels;
