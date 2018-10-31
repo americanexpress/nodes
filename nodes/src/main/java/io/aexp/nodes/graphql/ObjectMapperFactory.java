@@ -11,7 +11,7 @@
  * the License.
  */
 
-package io.aexp.nodes.graphql.internal;
+package io.aexp.nodes.graphql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

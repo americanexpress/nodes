@@ -14,7 +14,6 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.exceptions.GraphQLException;
-import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
