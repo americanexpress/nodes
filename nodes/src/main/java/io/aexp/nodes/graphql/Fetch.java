@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,9 @@ final class Fetch {
             } catch(IOException exception) {
                 inputStream = connection.getErrorStream();
             }
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            // Force stream reader to use UTF-8 for parsing, in order for deserialization not to use invalid
+            // encoding when reading from the underlying stream during JSON parsing
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
             Wrapper<T> wrapper = deserializeResponse(bufferedReader, responseClass);
 
