@@ -242,7 +242,7 @@ public final class GraphQLRequestEntity {
 
         Map<String, Property> children = new HashMap<String, Property>();
         for (Field field : fields) {
-            if (field.isSynthetic()) continue;
+            if (field.isSynthetic() || field.isEnumConstant()) continue;
 
             GraphQLIgnore ignoreAnnotation = field.getAnnotation(GraphQLIgnore.class);
             if (ignoreAnnotation != null) {

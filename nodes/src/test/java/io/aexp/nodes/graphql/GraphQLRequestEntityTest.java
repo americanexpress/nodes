@@ -15,6 +15,7 @@ package io.aexp.nodes.graphql;
 
 import org.junit.Test;
 import io.aexp.nodes.graphql.models.TestModel;
+import io.aexp.nodes.graphql.models.TestModelEnum;
 import io.aexp.nodes.graphql.models.TestModelScalar;
 
 import java.math.BigDecimal;
@@ -54,6 +55,17 @@ public class GraphQLRequestEntityTest {
         }
         assertNotNull(exception);
         assertEquals("request must be set", exception.getMessage());
+    }
+
+    @Test
+    public void requestWithEnumInModel() throws MalformedURLException {
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(EXAMPLE_URL)
+                .request(TestModelEnum.class)
+                .build();
+        requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
+        assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
+        assertEquals("GraphQLRequestEntity{request='query { number } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
     }
 
     @Test
