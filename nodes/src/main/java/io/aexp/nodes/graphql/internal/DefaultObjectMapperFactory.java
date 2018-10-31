@@ -11,20 +11,20 @@
  * the License.
  */
 
-package io.aexp.nodes.graphql;
+package io.aexp.nodes.graphql.internal;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public final class ObjectMapperFactory {
+public final class DefaultObjectMapperFactory implements ObjectMapperFactory {
 
-    private ObjectMapperFactory() {
+    public DefaultObjectMapperFactory() {
     }
 
-    public static ObjectMapper newSerializerObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
+    public ObjectMapper newSerializerMapper() {
+        final ObjectMapper mapper = new ObjectMapper();
 
         // JDK8+ Time and Date handling / JSR-310
         mapper.registerModule(new JavaTimeModule());
@@ -35,8 +35,8 @@ public final class ObjectMapperFactory {
         return mapper;
     }
 
-    public static ObjectMapper newDeserializerObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
+    public ObjectMapper newDeserializerMapper() {
+        final ObjectMapper mapper = new ObjectMapper();
 
         // JDK8+ Time and Date handling / JSR-310
         mapper.registerModule(new JavaTimeModule());

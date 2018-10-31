@@ -13,6 +13,8 @@
 
 package io.aexp.nodes.graphql;
 
+import io.aexp.nodes.graphql.internal.DefaultObjectMapperFactory;
+import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 import io.aexp.nodes.graphql.models.TestModel;
 import io.aexp.nodes.graphql.models.TestModelDateTime;
 import io.aexp.nodes.graphql.models.TestModels;
@@ -30,11 +32,13 @@ import static org.junit.Assert.assertEquals;
 
 public class DeserializerTest {
 
+    private ObjectMapperFactory objectMapperFactory;
     private ObjectMapper mapper;
 
     @Before
     public void setup() {
-        mapper = new ObjectMapper();
+        objectMapperFactory = new DefaultObjectMapperFactory();
+        mapper = objectMapperFactory.newDeserializerMapper();
     }
 
     @Test
@@ -69,7 +73,7 @@ public class DeserializerTest {
         InputStream stream = new ByteArrayInputStream(json.getBytes());
         JsonParser parser = mapper.getFactory().createParser(stream);
         DeserializationContext ctxt = mapper.getDeserializationContext();
-        Deserializer<TestModel> deserializer = new Deserializer<TestModel>(TestModel.class);
+        Deserializer<TestModel> deserializer = new Deserializer<TestModel>(TestModel.class, objectMapperFactory);
         Resource<TestModel> res = deserializer.deserialize(parser, ctxt);
         assertEquals("Resource{resource=TestTO{testString='String', testByte=1, testShort=1, testInteger=1, testLong=1, testCharacter=a, testFloat=1.5, testDouble=1.5, testBoolean=true, nestedTest=NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}, testArrayList=[val1, val2], testList=[NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}], ignoredField='null'}}", res.toString());
     }
@@ -129,7 +133,7 @@ public class DeserializerTest {
         InputStream stream = new ByteArrayInputStream(json.getBytes());
         JsonParser parser = mapper.getFactory().createParser(stream);
         DeserializationContext ctxt = mapper.getDeserializationContext();
-        Deserializer<TestModels> deserializer = new Deserializer<TestModels>(TestModels.class);
+        Deserializer<TestModels> deserializer = new Deserializer<TestModels>(TestModels.class, objectMapperFactory);
         Resource<TestModels> res = deserializer.deserialize(parser, ctxt);
         assertEquals("Resource{resource=TestTOs{test1=TestTO{testString='String', testByte=1, testShort=1, testInteger=1, testLong=1, testCharacter=a, testFloat=1.5, testDouble=1.5, testBoolean=true, nestedTest=NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}, testArrayList=[val1, val2], testList=[NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}], ignoredField='null'}, test2=TestTO{testString='String', testByte=1, testShort=1, testInteger=1, testLong=1, testCharacter=a, testFloat=1.5, testDouble=1.5, testBoolean=true, nestedTest=NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}, testArrayList=[val1, val2], testList=[NestedTest{anotherTestString='AnotherString', andAnothaOne='null'}], ignoredField='null'}}}", res.toString());
     }
@@ -144,7 +148,7 @@ public class DeserializerTest {
         InputStream stream = new ByteArrayInputStream(json.getBytes());
         JsonParser parser = mapper.getFactory().createParser(stream);
         DeserializationContext ctxt = mapper.getDeserializationContext();
-        Deserializer<TestModelDateTime> deserializer = new Deserializer<TestModelDateTime>(TestModelDateTime.class);
+        Deserializer<TestModelDateTime> deserializer = new Deserializer<TestModelDateTime>(TestModelDateTime.class, objectMapperFactory);
         Resource<TestModelDateTime> res = deserializer.deserialize(parser, ctxt);
         assertEquals("Resource{resource=TestModelDateTime{dateTime='2018-10-29T22:00:01Z'}}", res.toString());
     }

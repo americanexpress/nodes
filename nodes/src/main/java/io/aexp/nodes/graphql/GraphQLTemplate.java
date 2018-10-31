@@ -14,10 +14,12 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.exceptions.GraphQLException;
+import io.aexp.nodes.graphql.internal.DefaultObjectMapperFactory;
+import io.aexp.nodes.graphql.internal.ObjectMapperFactory;
 
 public class GraphQLTemplate {
 
-    private Fetch fetch = new Fetch();
+    private Fetch fetch;
 
     public enum GraphQLMethod {
         QUERY("query"),
@@ -30,6 +32,21 @@ public class GraphQLTemplate {
         public String getValue() {
             return value;
         }
+    }
+
+    /**
+     * Constructs a new GraphQL template instance using the default ObjectMapper factory.
+     */
+    public GraphQLTemplate() {
+        this(new DefaultObjectMapperFactory());
+    }
+
+    /**
+     * Constructs a new GraphQL template instance using the specified ObjectMapper factory.
+     * @param objectMapperFactory factory class used for creating ObjectMapper instances
+     */
+    public GraphQLTemplate(final ObjectMapperFactory objectMapperFactory) {
+        fetch = new Fetch(objectMapperFactory);
     }
 
     /**
