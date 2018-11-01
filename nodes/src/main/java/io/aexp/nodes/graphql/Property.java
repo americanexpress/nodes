@@ -52,13 +52,17 @@ final class Property {
         }
         if (this.resourceName != null) message.append(": ").append(resourceName).append(" ");
         if (this.arguments != null && !this.arguments.isEmpty()) {
-            message.append("(");
             List<String> argumentList = new ArrayList<String>();
             for (Argument argument: arguments) {
-                argumentList.add(StringUtil.formatGraphQLParameter(argument.getKey(), argument.getValue()));
+                if (!argument.isOptional() || argument.getValue() != null) {
+                    argumentList.add(StringUtil.formatGraphQLParameter(argument.getKey(), argument.getValue()));
+                }
             }
-            message.append(StringUtil.joinStringArray(",", argumentList));
-            message.append(") ");
+            if (!argumentList.isEmpty()) {
+                message.append("(");
+                message.append(StringUtil.joinStringArray(",", argumentList));
+                message.append(") ");
+            }
         }
         if (children != null && !children.isEmpty()) {
             message.append("{ ");

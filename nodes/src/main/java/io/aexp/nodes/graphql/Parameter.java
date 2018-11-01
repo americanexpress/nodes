@@ -40,13 +40,18 @@ class Parameter<T> {
 
     @Override
     public String toString() {
-        return toString("Parameter");
+        return toString("Parameter", null);
     }
 
-    String toString(String name) {
-        return name + "{" +
-                "key='" + key + '\'' +
-                ", value=" + value +
-                '}';
+    String toString(String name, String extraFields) {
+        StringBuilder builder = new StringBuilder(name);
+        builder.append('{');
+        builder.append("key='").append(key).append('\'');
+        builder.append(", value=").append(value);
+        if (extraFields != null) {
+            builder.append(", ").append(extraFields);
+        }
+        builder.append('}');
+        return builder.toString();
     }
 }
