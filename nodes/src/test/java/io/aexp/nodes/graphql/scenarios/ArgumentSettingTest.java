@@ -81,8 +81,8 @@ public class ArgumentSettingTest {
             exception = e;
         }
         assertNotNull(exception);
-        assertEquals("Argument 'Argument{key='test', value=1}' doesn't exist on path 'test'", exception.getMessage());
+        assertEquals("Argument 'Argument{key='test', value=1, optional=false}' doesn't exist on path 'test'", exception.getMessage());
         assertNull(exception.getErrors());
-        assertEquals("GraphQLException{message='Argument 'Argument{key='test', value=1}' doesn't exist on path 'test'', status='null', description='null', errors=null}", exception.toString());
+        assertEquals("GraphQLException{message='Argument 'Argument{key='test', value=1, optional=false}' doesn't exist on path 'test'', status='null', description='null', errors=null}", exception.toString());
     }
 }

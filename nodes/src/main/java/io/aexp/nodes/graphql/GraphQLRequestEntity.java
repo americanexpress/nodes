@@ -210,14 +210,16 @@ public final class GraphQLRequestEntity {
      */
     private List<Argument> setArgument(List<Argument> arguments, GraphQLArgument graphQLArgument) {
         String type = graphQLArgument.type();
+        boolean optional = graphQLArgument.optional();
+        String value = valueOf(graphQLArgument.value());
         if ("Boolean".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Boolean>(graphQLArgument.name(), Boolean.valueOf(graphQLArgument.value())));
+            arguments.add(new Argument<Boolean>(graphQLArgument.name(), value == null ? null : Boolean.valueOf(value), optional));
         } else if ("Integer".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Integer>(graphQLArgument.name(), Integer.valueOf(graphQLArgument.value())));
+            arguments.add(new Argument<Integer>(graphQLArgument.name(), value == null ? null : Integer.valueOf(value), optional));
         } else if ("Float".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Float>(graphQLArgument.name(), Float.valueOf(graphQLArgument.value())));
+            arguments.add(new Argument<Float>(graphQLArgument.name(), value == null ? null : Float.valueOf(value), optional));
         } else {
-            arguments.add(new Argument<String>(graphQLArgument.name(), graphQLArgument.value()));
+            arguments.add(new Argument<String>(graphQLArgument.name(), value, optional));
         }
         return arguments;
     }
@@ -309,6 +311,13 @@ public final class GraphQLRequestEntity {
             children.put(propertyKey, property);
         }
         return children;
+    }
+
+    private static String valueOf(String value) {
+        if (value == null || "null".equals(value)) {
+            return null;
+        }
+        return value;
     }
 
     public static class RequestBuilder {

@@ -16,6 +16,7 @@ package io.aexp.nodes.graphql;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ArgumentTest {
 
@@ -30,7 +31,19 @@ public class ArgumentTest {
         argument.setValue("test");
         assertEquals("test", argument.getKey());
         assertEquals("test", argument.getValue());
-        assertEquals("Argument{key='test', value=test}", argument.toString());
+        assertEquals("Argument{key='test', value=test, optional=false}", argument.toString());
+    }
+
+    @Test
+    public void argumentOptionalTest() {
+        Argument argument = new Argument(null, null, false);
+        argument.setKey("k");
+        argument.setValue("v");
+        argument.setOptional(true);
+        assertEquals("k", argument.getKey());
+        assertEquals("v", argument.getValue());
+        assertTrue(argument.isOptional());
+        assertEquals("Argument{key='k', value=v, optional=true}", argument.toString());
     }
 
     @Test
@@ -40,7 +53,7 @@ public class ArgumentTest {
         argument.setValue(1);
         assertEquals("test", argument.getKey());
         assertEquals(1, argument.getValue());
-        assertEquals("Argument{key='test', value=1}", argument.toString());
+        assertEquals("Argument{key='test', value=1, optional=false}", argument.toString());
     }
 
     @Test
@@ -50,8 +63,9 @@ public class ArgumentTest {
         argument.setValue(STATUS.active);
         assertEquals("test", argument.getKey());
         assertEquals(STATUS.active, argument.getValue());
-        assertEquals("Argument{key='test', value=active}", argument.toString());
+        assertEquals("Argument{key='test', value=active, optional=false}", argument.toString());
     }
+
     @Test
     public void argumentInputObjectTest() {
         Argument argument = new Argument(null, null);

@@ -16,6 +16,7 @@ package io.aexp.nodes.graphql;
 import org.junit.Test;
 import io.aexp.nodes.graphql.models.TestModel;
 import io.aexp.nodes.graphql.models.TestModelEnum;
+import io.aexp.nodes.graphql.models.TestModelOptionalArguments;
 import io.aexp.nodes.graphql.models.TestModelScalar;
 
 import java.math.BigDecimal;
@@ -55,6 +56,30 @@ public class GraphQLRequestEntityTest {
         }
         assertNotNull(exception);
         assertEquals("request must be set", exception.getMessage());
+    }
+
+    @Test
+    public void requestWithOptionalParameter() throws MalformedURLException {
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(EXAMPLE_URL)
+                .request(TestModelOptionalArguments.class)
+                .arguments(new Arguments("test.nested", new Argument<Integer>("first", 10)))
+                .build();
+        requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
+        assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
+        assertEquals("GraphQLRequestEntity{request='query { test { nested (first:10) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
+    }
+
+    @Test
+    public void requestWithOtherOptionalParameter() throws MalformedURLException {
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(EXAMPLE_URL)
+                .request(TestModelOptionalArguments.class)
+                .arguments(new Arguments("test.nested", new Argument<Integer>("last", 5)))
+                .build();
+        requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
+        assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
+        assertEquals("GraphQLRequestEntity{request='query { test { nested (last:5) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
     }
 
     @Test
