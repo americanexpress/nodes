@@ -212,12 +212,14 @@ public final class GraphQLRequestEntity {
         String type = graphQLArgument.type();
         boolean optional = graphQLArgument.optional();
         String value = valueOf(graphQLArgument.value());
-        if ("Boolean".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Boolean>(graphQLArgument.name(), value == null ? null : Boolean.valueOf(value), optional));
+        if (value == null) {
+            arguments.add(new Argument<String>(graphQLArgument.name(), value, optional));
+        } else if ("Boolean".equalsIgnoreCase(type)) {
+            arguments.add(new Argument<Boolean>(graphQLArgument.name(), Boolean.valueOf(value), optional));
         } else if ("Integer".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Integer>(graphQLArgument.name(), value == null ? null : Integer.valueOf(value), optional));
+            arguments.add(new Argument<Integer>(graphQLArgument.name(), Integer.valueOf(value), optional));
         } else if ("Float".equalsIgnoreCase(type)) {
-            arguments.add(new Argument<Float>(graphQLArgument.name(), value == null ? null : Float.valueOf(value), optional));
+            arguments.add(new Argument<Float>(graphQLArgument.name(), Float.valueOf(value), optional));
         } else {
             arguments.add(new Argument<String>(graphQLArgument.name(), value, optional));
         }
