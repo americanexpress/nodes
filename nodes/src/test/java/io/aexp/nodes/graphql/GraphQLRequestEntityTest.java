@@ -13,6 +13,7 @@
 
 package io.aexp.nodes.graphql;
 
+import org.junit.Before;
 import org.junit.Test;
 import io.aexp.nodes.graphql.models.TestModel;
 import io.aexp.nodes.graphql.models.TestModelEnum;
@@ -21,7 +22,9 @@ import io.aexp.nodes.graphql.models.TestModelScalar;
 
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +35,15 @@ public class GraphQLRequestEntityTest {
         active
     }
 
-    private String EXAMPLE_URL = "https://graphql.example.com";
+    private static String EXAMPLE_URL = "https://graphql.example.com";
+    private List<String> idList;
+
+    @Before
+    public void setUp() {
+        idList = new ArrayList<String>();
+        idList.add("47");
+        idList.add("$id");
+    }
 
     @Test
     public void requestWithoutUrl() {
@@ -63,11 +74,14 @@ public class GraphQLRequestEntityTest {
         GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
                 .url(EXAMPLE_URL)
                 .request(TestModelOptionalArguments.class)
-                .arguments(new Arguments("test.nested", new Argument<Integer>("first", 10)))
+                .arguments(
+                        new Arguments("test.nested",
+                                new Argument<List<String>>("ids", idList),
+                                new Argument<Integer>("first", 10)))
                 .build();
         requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
         assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
-        assertEquals("GraphQLRequestEntity{request='query { test { nested (first:10) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
+        assertEquals("GraphQLRequestEntity{request='query { test { nested (ids:[\"47\",$id],first:10) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
     }
 
     @Test
@@ -75,11 +89,14 @@ public class GraphQLRequestEntityTest {
         GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
                 .url(EXAMPLE_URL)
                 .request(TestModelOptionalArguments.class)
-                .arguments(new Arguments("test.nested", new Argument<Integer>("last", 5)))
+                .arguments(
+                        new Arguments("test.nested",
+                                new Argument<List<String>>("ids", idList),
+                                new Argument<Integer>("last", 5)))
                 .build();
         requestEntity.setRequestMethod(GraphQLTemplate.GraphQLMethod.QUERY);
         assertEquals(EXAMPLE_URL, requestEntity.getUrl().toString());
-        assertEquals("GraphQLRequestEntity{request='query { test { nested (last:5) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
+        assertEquals("GraphQLRequestEntity{request='query { test { nested (ids:[\"47\",$id],last:5) { string } } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
     }
 
     @Test
