@@ -20,6 +20,7 @@ import io.aexp.nodes.graphql.annotations.GraphQLProperty;
 @GraphQLProperty(name = "test")
 public class TestModelOptionalArguments {
     @GraphQLArguments({
+        @GraphQLArgument(name = "ids"),
         @GraphQLArgument(name = "first", type = "Integer", optional = true),
         @GraphQLArgument(name = "last", type = "Integer", optional = true)
     })
