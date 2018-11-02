@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 
 abstract class StringUtil {
 
+    private StringUtil() {
+    }
+
     /**
      * Joins and array to a delimited string
      *
@@ -46,7 +49,7 @@ abstract class StringUtil {
         StringBuilder stringBuilder = new StringBuilder();
         Pattern pattern = Pattern.compile("^\\$");
         Matcher matcher = pattern.matcher("" + value);
-        if (value instanceof String && !"null".equalsIgnoreCase((String) value) && !matcher.find()) {
+        if (value instanceof String && !matcher.find()) {
             stringBuilder.append(key).append(":\"").append(value).append("\"");
         } else if (value instanceof List) {
             stringBuilder.append(key).append(":").append(formatGraphQLArgumentList((List) value));
@@ -71,7 +74,7 @@ abstract class StringUtil {
         for (Object value: values) {
             if (stringBuilder.length() != 1) stringBuilder.append(",");
             Matcher m = p.matcher("" + value);
-            if (value instanceof String && !"null".equalsIgnoreCase((String) value) && !m.find()) {
+            if (value instanceof String && !m.find()) {
                 stringBuilder.append("\"").append(value).append("\"");
             } else if (value instanceof InputObject) {
                 stringBuilder.append(((InputObject) value).getMessage());

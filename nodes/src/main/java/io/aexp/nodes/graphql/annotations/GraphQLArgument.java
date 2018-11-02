@@ -26,4 +26,5 @@ public @interface GraphQLArgument {
     String name();
     String value() default "null";
     String type() default "null";
+    boolean optional() default false;
 }

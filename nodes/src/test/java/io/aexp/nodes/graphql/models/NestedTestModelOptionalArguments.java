@@ -11,31 +11,24 @@
  * the License.
  */
 
-package io.aexp.nodes.graphql;
+package io.aexp.nodes.graphql.models;
 
-public class Argument<T> extends Parameter<T> {
-    private boolean optional;
+public class NestedTestModelOptionalArguments {
 
-    public Argument(String key, T value) {
-        this(key, value, false);
+    private String string;
+
+    public String getString() {
+        return string;
     }
 
-    public Argument(String key, T value, boolean optional) {
-        super(key, value);
-        this.optional = optional;
-    }
-
-    public boolean isOptional() {
-        return optional;
-    }
-
-    public void setOptional(boolean optional) {
-        this.optional = optional;
+    public void setString(String anotherTestString) {
+        this.string = anotherTestString;
     }
 
     @Override
     public String toString() {
-        return super.toString(this.getClass().getSimpleName(),
-                "optional=" + optional);
+        return "NestedTestModelOptionalArguments{" +
+                "string='" + string + '\'' +
+                '}';
     }
 }
