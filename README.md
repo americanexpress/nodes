@@ -70,8 +70,8 @@ GraphQLResponseEntity<SampleModel> responseEntity = graphQLTemplate.query(reques
 
 ### Annotations to configure fields
 
-#### `@GraphQLArgument(name="name", value="defaultVal", type="String")`
-> Used above property fields<br><b>name (required)</b>: GraphQL argument name<br><b>value (optional)</b>: default value to set the argument to<br><b>type (optional)</b>: how to parse the optional value. Accepts an enum of "String", "Boolean", "Integer", or "Float" - defaults to be parsed as a string.<br>You can specify fields arguments directly inline using this. This is good for static field arguments such as result display settings, for instance the format of a date or the locale of a message.
+#### `@GraphQLArgument(name="name", value="defaultVal", type="String", optional=false)`
+> Used above property fields<br><b>name (required)</b>: GraphQL argument name<br><b>value (optional)</b>: default value to set the argument to<br><b>type (optional)</b>: how to parse the optional value. Accepts an enum of "String", "Boolean", "Integer", or "Float" - defaults to be parsed as a string.<br><b>optional (optional)</b>: set to true if the value is optional and should be left out if value is null - defaults to false.<br>You can specify fields arguments directly inline using this. This is good for static field arguments such as result display settings, for instance the format of a date or the locale of a message.
 
 *example:*
 ```java

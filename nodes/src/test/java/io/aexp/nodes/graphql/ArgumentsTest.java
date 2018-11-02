@@ -23,6 +23,6 @@ public class ArgumentsTest {
     public void argumentsTest() {
         Arguments arguments = new Arguments("somePath", new Argument<String>("someKey", "someValue"));
         assertEquals("somePath", arguments.getDotPath());
-        assertEquals("Arguments{dotPath='somePath', arguments=[Argument{key='someKey', value=someValue}]}", arguments.toString());
+        assertEquals("Arguments{dotPath='somePath', arguments=[Argument{key='someKey', value=someValue, optional=false}]}", arguments.toString());
     }
 }
