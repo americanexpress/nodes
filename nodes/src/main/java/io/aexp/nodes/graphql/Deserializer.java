@@ -14,6 +14,7 @@
 package io.aexp.nodes.graphql;
 
 import io.aexp.nodes.graphql.annotations.GraphQLProperty;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -25,10 +26,12 @@ import java.io.IOException;
 
 final class Deserializer<T> extends JsonDeserializer<Resource<T>> {
 
-    private Class<T> t;
+    private final Class<T> t;
+    private final ObjectMapperFactory objectMapperFactory;
 
-    Deserializer(Class<T> type) {
+    Deserializer(Class<T> type, ObjectMapperFactory objectMapperFactory) {
         t = type;
+        this.objectMapperFactory = objectMapperFactory;
     }
 
     @Override
@@ -36,7 +39,7 @@ final class Deserializer<T> extends JsonDeserializer<Resource<T>> {
 
         Resource<T> resourceModel = new Resource<T>();
 
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = objectMapperFactory.newDeserializerMapper();
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
 
