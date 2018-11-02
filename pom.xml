@@ -4,7 +4,7 @@
 
     <groupId>io.aexp.nodes.graphql</groupId>
     <artifactId>parent</artifactId>
-    <version>0.3.1</version>
+    <version>0.4.0</version>
     <packaging>pom</packaging>
 
     <name>Nodes (Parent)</name>
