@@ -44,11 +44,12 @@ public final class GraphQLRequestEntity {
     private final Map<String, Object> variables;
     private final Property property = new Property();
     private final List<Class> scalars;
-    private GraphQLTemplate.GraphQLMethod requestMethod = GraphQLTemplate.GraphQLMethod.QUERY;
+    private GraphQLTemplate.GraphQLMethod requestMethod;
     private String request;
 
     GraphQLRequestEntity(RequestBuilder builder) {
         this.url = builder.url;
+        this.requestMethod = builder.requestMethod;
         this.scalars = Collections.unmodifiableList(builder.scalars);
         this.headers = Collections.unmodifiableMap(builder.headers);
         this.variables = Collections.unmodifiableMap(variableListToMap(builder.variables));
@@ -87,7 +88,7 @@ public final class GraphQLRequestEntity {
         return scalars;
     }
 
-    void setRequestMethod(GraphQLTemplate.GraphQLMethod requestMethod) {
+    public void setRequestMethod(GraphQLTemplate.GraphQLMethod requestMethod) {
         this.requestMethod = requestMethod;
         property.setMethod(requestMethod);
     }
@@ -333,6 +334,7 @@ public final class GraphQLRequestEntity {
         List<Arguments> arguments = null;
         List<Variable> variables = new ArrayList<Variable>();
         List<Class> scalars = new ArrayList<Class>();
+        GraphQLTemplate.GraphQLMethod requestMethod = GraphQLTemplate.GraphQLMethod.QUERY;
 
         RequestBuilder() { }
 
@@ -383,6 +385,11 @@ public final class GraphQLRequestEntity {
 
         public RequestBuilder headers(Map<String, String> headers) {
             this.headers = headers;
+            return this;
+        }
+
+        public RequestBuilder requestMethod(GraphQLTemplate.GraphQLMethod requestMethod) {
+            this.requestMethod = requestMethod;
             return this;
         }
 
