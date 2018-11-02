@@ -198,7 +198,9 @@ public final class GraphQLRequestEntity {
                 if (scalar.equals(clazz)) return true;
             }
         }
-        return clazz.isPrimitive() || clazz.getPackage().getName().equalsIgnoreCase("java.lang");
+        return clazz.isPrimitive()
+                || clazz.getPackage().getName().equalsIgnoreCase("java.lang")
+                || clazz.getPackage().getName().equalsIgnoreCase("java.time");
     }
 
     /**
