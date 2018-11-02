@@ -38,4 +38,9 @@ public class ParameterTest {
         assertEquals(value, parameter.getValue());
     }
 
+    @Test
+    public void parameterStringTest() {
+        Parameter<String> parameter = new Parameter<String>("key", "value");
+        assertEquals("Parameter{key='key', value=value}", parameter.toString());
+    }
 }
