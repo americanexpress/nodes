@@ -20,6 +20,6 @@ public class Variable<T> extends Parameter {
 
     @Override
     public String toString() {
-        return super.toString(this.getClass().getSimpleName());
+        return super.toString(this.getClass().getSimpleName(), null);
     }
 }
