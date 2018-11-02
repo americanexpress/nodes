@@ -132,6 +132,16 @@ public class GraphQLRequestEntityTest {
     }
 
     @Test
+    public void simpleRequestWithMethod() throws MalformedURLException {
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(EXAMPLE_URL)
+                .request(TestModel.class)
+                .requestMethod(GraphQLTemplate.GraphQLMethod.MUTATE)
+                .build();
+        assertEquals("GraphQLRequestEntity{request='mutation ($andAnothaVariable:status,$anothaVariable:Int,$andAListVariable:[String],$variableName:String!){ test (id:null) { testShort : testShort testCharacter testList { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testInteger testBoolean nestedTest { anotherTestString (variableName:$variableName) andAnothaOne (anothaVariable:$anothaVariable,andAnothaVariable:$andAnothaVariable,andAListVariable:$andAListVariable) } testByte : testByte testString : testString (anotherOne:null,default:\"default\",defaultList:null) testArrayList testFloat testDouble testLong } } ', url='"+EXAMPLE_URL+"'}", requestEntity.toString());
+    }
+
+    @Test
     public void simpleRequestWithVariables() throws MalformedURLException {
         GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
                 .url(EXAMPLE_URL)
