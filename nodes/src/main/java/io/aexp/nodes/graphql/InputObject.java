@@ -41,7 +41,7 @@ public final class InputObject<T> {
 
         private final Map<String, T> map = new HashMap<String, T>();
 
-        public Builder put(String key, T value) {
+        public Builder<T> put(String key, T value) {
             map.put(key, value);
             return this;
         }
