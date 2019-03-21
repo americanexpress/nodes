@@ -18,7 +18,7 @@ import io.aexp.nodes.graphql.internal.DefaultObjectMapperFactory;
 
 public class GraphQLTemplate {
 
-    private Fetch fetch;
+    private Fetcher fetch;
 
     public enum GraphQLMethod {
         QUERY("query"),
@@ -45,7 +45,15 @@ public class GraphQLTemplate {
      * @param objectMapperFactory factory class used for creating ObjectMapper instances
      */
     public GraphQLTemplate(final ObjectMapperFactory objectMapperFactory) {
-        fetch = new Fetch(objectMapperFactory);
+        this(new Fetch(objectMapperFactory));
+    }
+
+    /**
+     * Constructs a new GraphQL template instance using the Fetcher implementation.
+     * @param fetcher factory class used for creating ObjectMapper instances
+     */
+    public GraphQLTemplate(final Fetcher fetcher) {
+        fetch = fetcher;
     }
 
     /**
