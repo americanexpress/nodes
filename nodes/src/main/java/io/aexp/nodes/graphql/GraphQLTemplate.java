@@ -49,6 +49,29 @@ public class GraphQLTemplate {
     }
 
     /**
+     * Constructs a new GraphQL template instance using the default ObjectMapper factory,
+     * connect and read timeout for the underlying HttpURLConnection.
+     * @param connectTimeout Sets a specified timeout value, in milliseconds, to be used
+     *     when opening a communications link
+     * @param readTimeout Sets the read timeout to a specified timeout, in milliseconds
+     */
+    public GraphQLTemplate(int connectTimeout, int readTimeout) {
+        this(new DefaultObjectMapperFactory(), connectTimeout, readTimeout);
+    }
+
+    /**
+     * Constructs a new GraphQL template instance using the specified ObjectMapper factory,
+     * connect and read timeout for the underlying HttpURLConnection.
+     * @param objectMapperFactory factory class used for creating ObjectMapper instances
+     * @param connectTimeout Sets a specified timeout value, in milliseconds, to be used
+     *      when opening a communications link
+     * @param readTimeout Sets the read timeout to a specified timeout, in milliseconds
+     */
+    public GraphQLTemplate(final ObjectMapperFactory objectMapperFactory, int connectTimeout, int readTimeout) {
+        fetch = new Fetch(objectMapperFactory, connectTimeout, readTimeout);
+    }
+
+    /**
      * Execute a GraphQL query request.
      * @param requestEntity request entity to be executed upon
      * @param responseClass response from the execution
