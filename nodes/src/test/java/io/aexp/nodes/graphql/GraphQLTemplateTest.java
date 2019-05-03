@@ -20,6 +20,7 @@ import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.SocketPolicy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -232,5 +233,26 @@ public class GraphQLTemplateTest {
         }
         assertNotNull(exception);
         assertEquals(exception.getMessage(), "requestEntity must not be null");
+    }
+
+    @Test
+    public void timeOutVariables() throws MalformedURLException {
+        graphQLTemplate = new GraphQLTemplate(2000, 2000);
+        server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE));
+        HttpUrl serviceUrl = server.url("/serverTimeout");
+        GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
+                .url(serviceUrl.toString())
+                .request(TestModel.class)
+                .build();
+        GraphQLException exception = null;
+        try {
+            graphQLTemplate.query(requestEntity, TestModel.class);
+        } catch (GraphQLException e) {
+            exception = e;
+        }
+        assertNotNull(exception);
+        assertEquals(exception.getDescription(), "Read timed out");
+
+
     }
 }

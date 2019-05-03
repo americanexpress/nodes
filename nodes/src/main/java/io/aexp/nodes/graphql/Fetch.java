@@ -36,9 +36,18 @@ final class Fetch {
     private ObjectMapper mapper;
     private SimpleModule module;
     private static final int STATUS_CODE_THRESHOLD = 400;
+    private int connectTimeout = -1;
+    private int readTimeout = -1;
 
     Fetch(ObjectMapperFactory objectMapperFactory) {
         this.objectMapperFactory = objectMapperFactory;
+    }
+
+    Fetch(ObjectMapperFactory objectMapperFactory, int connectTimeout, int readTimeout) {
+        this(objectMapperFactory);
+        this.connectTimeout = connectTimeout;
+        this.readTimeout = readTimeout;
+
     }
 
     <T> GraphQLResponseEntity<T> send(GraphQLRequestEntity requestEntity, Class<T> responseClass) throws GraphQLException {
@@ -116,6 +125,13 @@ final class Fetch {
             connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
         connection.setUseCaches(false);
+        if (this.connectTimeout >= 0) {
+            connection.setConnectTimeout(this.connectTimeout);
+        }
+
+        if (this.readTimeout >= 0) {
+            connection.setReadTimeout(this.readTimeout);
+        }
         return connection;
     }
 
