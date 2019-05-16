@@ -58,10 +58,10 @@ Replace _latest_ with the desired version to install. The versions available for
 GraphQLTemplate graphQLTemplate = new GraphQLTemplate();
 
 GraphQLRequestEntity requestEntity = GraphQLRequestEntity.Builder()
-    .url("http://graphql.example.com/graphql");
-    .variables(new Variable("timeFormat", "MM/dd/yyyy"))
+    .url("http://graphql.example.com/graphql")
+    .variables(new Variable<>("timeFormat", "MM/dd/yyyy"))
     .arguments(new Arguments("path.to.argument.property",
-        new Argument("id", "d070633a9f9")))
+        new Argument<>("id", "d070633a9f9")))
     .scalars(BigDecimal.class)
     .request(SampleModel.class)
     .build();
