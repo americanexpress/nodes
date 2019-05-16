@@ -174,7 +174,7 @@ query($isPublic: Boolean) {
 *example:*
 ```java
     ...
-    GraphQLVariables({
+    @GraphQLVariables({
         @GraphQLVariable(name="isPublic", scalar="Boolean"),
         @GraphQLVariable(name="username", scalar="String!")
     })
