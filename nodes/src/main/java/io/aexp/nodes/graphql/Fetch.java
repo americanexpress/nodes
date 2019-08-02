@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-final class Fetch {
+final class Fetch implements Fetcher {
 
     private final ObjectMapperFactory objectMapperFactory;
     private ObjectMapper mapper;
@@ -50,7 +50,7 @@ final class Fetch {
 
     }
 
-    <T> GraphQLResponseEntity<T> send(GraphQLRequestEntity requestEntity, Class<T> responseClass) throws GraphQLException {
+    public <T> GraphQLResponseEntity<T> send(GraphQLRequestEntity requestEntity, Class<T> responseClass) throws GraphQLException {
         mapper = objectMapperFactory.newSerializerMapper();
         module = new SimpleModule();
 
