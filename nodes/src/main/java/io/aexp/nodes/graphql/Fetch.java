@@ -64,7 +64,7 @@ final class Fetch implements Fetcher {
         try {
             String requestParams = mapper.writeValueAsString(request);
             byte[] postData = requestParams.getBytes();
-            HttpURLConnection connection = createConnection(requestEntity.getUrl(), postData, requestEntity.getHeaders());
+            HttpURLConnection connection = getOrCreateConnection(requestEntity.getUrl(), postData, requestEntity.getHeaders());
 
             DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
             dataOutputStream.write(postData);
@@ -110,27 +110,35 @@ final class Fetch implements Fetcher {
         }
     }
 
-    private HttpURLConnection createConnection(URL requestUrl, byte[] postData, Map<String, String> headers) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+    private HttpURLConnection getOrCreateConnection(URL requestUrl, byte[] postData, Map<String, String> headers) throws IOException {
         int postDataLength = postData.length;
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        connection.setInstanceFollowRedirects(false);
+        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("charset", "utf-8");
-        connection.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
-        }
-        connection.setUseCaches(false);
         if (this.connectTimeout >= 0) {
             connection.setConnectTimeout(this.connectTimeout);
         }
-
         if (this.readTimeout >= 0) {
             connection.setReadTimeout(this.readTimeout);
+        }
+
+        try {
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("charset", "utf-8");
+
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+            connection.setUseCaches(false);
+
+            if (!connection.getHeaderField("Connection").toLowerCase().contains("keep-alive")) {
+                connection.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+            }
+        } catch (IllegalStateException e) {
+            // Do nothing as connection already exists
         }
         return connection;
     }
