@@ -1,0 +1,35 @@
+---
+jobs:
+- job: test
+  container: maven:3.6.1-jdk-8
+  pool:
+    name: "UKHO Ubuntu 1804"
+    demands:
+      - agent.os -equals Linux
+  steps:
+    - task: DownloadSecureFile@1
+      inputs:
+        secureFile: settings.xml
+    - script: |
+        grep expires $DOWNLOADSECUREFILE_SECUREFILEPATH
+        mvn -s $DOWNLOADSECUREFILE_SECUREFILEPATH clean verify
+- job: build
+  dependsOn: test
+  pool:
+    name: "UKHO Ubuntu 1804"
+    demands:
+    - agent.os -equals Linux
+  steps:
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      command: login
+      containerRegistry: ukho-container-registry-connection
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: settings.xml
+  - script: |
+      cp $DOWNLOADSECUREFILE_SECUREFILEPATH $(Build.SourcesDirectory)
+  - script: |
+      mvn -s $DOWNLOADSECUREFILE_SECUREFILEPATH clean deploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
