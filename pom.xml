@@ -13,6 +13,7 @@
 
     <modules>
         <module>nodes</module>
+        <module>samples/java-sample</module>
         <module>samples/kotlin-sample</module>
         <module>samples/scala-sample</module>
     </modules>
