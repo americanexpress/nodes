@@ -38,7 +38,7 @@ _Maven_
 ```
 
 _Gradle_
-```
+``` groovy
 repositories {
     maven {
         url 'https://dl.bintray.com/americanexpress/maven/'
