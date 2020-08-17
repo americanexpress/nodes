@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-final class Property {
+public final class Property {
 
     private String resourceName;
     private GraphQLTemplate.GraphQLMethod method;
