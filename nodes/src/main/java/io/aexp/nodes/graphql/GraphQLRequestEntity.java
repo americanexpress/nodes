@@ -87,6 +87,10 @@ public final class GraphQLRequestEntity {
     public List<Class> getScalars() {
         return scalars;
     }
+    
+    public Property getProperty() {
+    	return property;
+    }
 
     public void setRequestMethod(GraphQLTemplate.GraphQLMethod requestMethod) {
         this.requestMethod = requestMethod;
