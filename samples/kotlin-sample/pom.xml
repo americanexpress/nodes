@@ -14,7 +14,7 @@
     <name>Kotlin Sample</name>
 
     <properties>
-        <kotlin.version>1.0.0</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
     </properties>
 
     <dependencies>
